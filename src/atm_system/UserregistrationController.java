@@ -14,16 +14,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class User_loginController implements Initializable {
+public class UserregistrationController implements Initializable {
 
     @FXML
-    private TextField text1; // Username
+    private TextField text3; // Name
     @FXML
-    private TextField text2; // Password
+    private TextField text4; // Username
     @FXML
-    private Button btn1;     // Login Button
+    private TextField text5; // Password
     @FXML
-    private Button btn2;     // Create Account Button
+    private Button btn3;     // Submit
+    @FXML
+    private Button btn4;     // Back
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -31,23 +33,24 @@ public class User_loginController implements Initializable {
     }
 
     @FXML
-    private void login(ActionEvent event) {
-        String username = text1.getText();
-        String password = text2.getText();
+    private void submit(ActionEvent event) {
+        String name = text3.getText();
+        String username = text4.getText();
+        String password = text5.getText();
 
-        if (username.equals("admin") && password.equals("1234")) {
-            showAlert(Alert.AlertType.INFORMATION, "Login Successful!", "Welcome, " + username + "!");
-            // Redirect to dashboard if needed
+        if (name.isEmpty() || username.isEmpty() || password.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Registration Failed", "All fields are required!");
         } else {
-            showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
+           
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Account created successfully!");
         }
     }
 
     @FXML
-    private void Create_a_new_account(ActionEvent event) {
+    private void backtologin(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("Userregistration.fxml"));
-            Stage stage = (Stage) btn2.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("User_login.fxml"));
+            Stage stage = (Stage) btn4.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
