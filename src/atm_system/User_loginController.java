@@ -17,40 +17,49 @@ import javafx.stage.Stage;
 public class User_loginController implements Initializable {
 
     @FXML
-    private TextField text1; // Username
+    private TextField text1; // Card Number
     @FXML
-    private TextField text2; // Password
+    private TextField text2; // PIN
     @FXML
     private Button btn1;     // Login Button
     @FXML
     private Button btn2;     // Create Account Button
 
+    private final String validCardNumber = "12345678";
+    private final String validPin = "1234";
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Initialization if needed
+       
     }
 
     @FXML
     private void login(ActionEvent event) {
-        String username = text1.getText();
-        String password = text2.getText();
+        String cardNumber = text1.getText().trim();
+        String pin = text2.getText().trim();
 
-        if (username.equals("admin") && password.equals("1234")) {
-            showAlert(Alert.AlertType.INFORMATION, "Login Successful!", "Welcome, " + username + "!");
-            // Redirect to dashboard if needed
+        if (cardNumber.equals(validCardNumber) && pin.equals(validPin)) {
+            showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome!");
+            DashboardController.setCurrentUser(cardNumber);
+            
+            loadScene("dashboard.fxml");
         } else {
-            showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
+            showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid Card Number or PIN.");
         }
     }
 
     @FXML
     private void Create_a_new_account(ActionEvent event) {
+        loadScene("Userregistration.fxml");
+    }
+
+    private void loadScene(String fxml) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("Userregistration.fxml"));
-            Stage stage = (Stage) btn2.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource(fxml));
+            Stage stage = (Stage) btn1.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException e) {
-            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Unable to load page: " + fxml);
         }
     }
 
@@ -59,6 +68,6 @@ public class User_loginController implements Initializable {
         alert.setTitle(title);
         alert.setContentText(content);
         alert.setHeaderText(null);
-        alert.show();
+        alert.showAndWait();
     }
 }
