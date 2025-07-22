@@ -2,6 +2,9 @@ package atm_system;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,12 +28,9 @@ public class User_loginController implements Initializable {
     @FXML
     private Button btn2;     // Create Account Button
 
-    private final String validCardNumber = "12345678";
-    private final String validPin = "1234";
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
+        // কিছু প্রাথমিক কাজ লাগলে এখানে লিখবেন
     }
 
     @FXML
@@ -38,10 +38,14 @@ public class User_loginController implements Initializable {
         String cardNumber = text1.getText().trim();
         String pin = text2.getText().trim();
 
-        if (cardNumber.equals(validCardNumber) && pin.equals(validPin)) {
+        if(cardNumber.isEmpty() || pin.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Input Error", "Please enter both Card Number and PIN.");
+            return;
+        }
+
+        if(authenticateUser(cardNumber, pin)) {
             showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome!");
             DashboardController.setCurrentUser(cardNumber);
-            
             loadScene("dashboard.fxml");
         } else {
             showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid Card Number or PIN.");
@@ -69,5 +73,23 @@ public class User_loginController implements Initializable {
         alert.setContentText(content);
         alert.setHeaderText(null);
         alert.showAndWait();
+    }
+
+    // ডাটাবেস থেকে ইউজার ভেরিফাই করা
+    private boolean authenticateUser(String cardNumber, String pin) {
+        String query = "SELECT * FROM users WHERE card_number = ? AND pin = ?";
+        try (Connection conn = DatabaseConnection.connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, cardNumber);
+            stmt.setString(2, pin);
+
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to connect: " + e.getMessage());
+            return false;
+        }
     }
 }

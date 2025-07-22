@@ -2,6 +2,8 @@ package atm_system;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,9 +21,9 @@ public class UserregistrationController implements Initializable {
     @FXML
     private TextField text3; // Name
     @FXML
-    private TextField text4; // Username
+    private TextField text4; // Username (card_number)
     @FXML
-    private TextField text5; // Password
+    private TextField text5; // Password (pin)
     @FXML
     private Button btn3;     // Submit
     @FXML
@@ -34,16 +36,46 @@ public class UserregistrationController implements Initializable {
 
     @FXML
     private void submit(ActionEvent event) {
-        String name = text3.getText();
-        String username = text4.getText();
-        String password = text5.getText();
+        String name = text3.getText().trim();
+        String username = text4.getText().trim(); // ধরা হলো card_number
+        String password = text5.getText().trim(); // ধরা হলো pin
 
         if (name.isEmpty() || username.isEmpty() || password.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Registration Failed", "All fields are required!");
         } else {
-           
-            showAlert(Alert.AlertType.INFORMATION, "Success", "Account created successfully!");
+            // Database এ সেভ করার মেথড কল
+            if(registerUser(name, username, password)) {
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Account created successfully!");
+                clearFields();
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Failed", "Account creation failed. Try again!");
+            }
         }
+    }
+
+    private boolean registerUser(String name, String username, String password) {
+        String insertQuery = "INSERT INTO users (name, card_number, pin, balance) VALUES (?, ?, ?, 0.0)";
+        // balance ডিফল্ট 0.0 ধরে নিচ্ছি
+        try (Connection connectDB = DatabaseConnection.connect();
+             PreparedStatement statement = connectDB.prepareStatement(insertQuery)) {
+
+            statement.setString(1, name);
+            statement.setString(2, username);
+            statement.setString(3, password);
+
+            int result = statement.executeUpdate();
+            return result > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void clearFields() {
+        text3.clear();
+        text4.clear();
+        text5.clear();
     }
 
     @FXML
