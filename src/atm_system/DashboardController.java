@@ -37,7 +37,7 @@ public class DashboardController implements Initializable {
             showAlert("User card number not set. Please login again.");
             return;
         }
-        labelname.setText("Card Number: " + currentUserCardNumber);
+        labelname.setText("Card Number: " + maskCardNumber(currentUserCardNumber)); // updated line
         listview.setItems(transactions);
         loadUserBalance();
         loadTransactions();
@@ -175,5 +175,13 @@ public class DashboardController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+  
+    private String maskCardNumber(String cardNumber) {
+        if (cardNumber.length() != 8) return cardNumber;
+        String first3 = cardNumber.substring(0, 3);
+        String last2 = cardNumber.substring(6);
+        return first3 + "***" + last2;
     }
 }

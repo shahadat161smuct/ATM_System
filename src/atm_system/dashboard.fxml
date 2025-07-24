@@ -14,10 +14,10 @@
             <Font name="System Bold Italic" size="44.0" />
          </font>
       </Label>
-      <TextField fx:id="text6" layoutX="24.0" layoutY="172.0" prefHeight="50.0" prefWidth="259.0" promptText="Enter your amount" />
-      <Button fx:id="btn5" layoutX="24.0" layoutY="244.0" mnemonicParsing="false" onAction="#withdraw" text="Withdraw" />
-      <Button fx:id="btn6" layoutX="125.0" layoutY="244.0" mnemonicParsing="false" onAction="#deposit" text="Deposit" />
-      <Label fx:id="label1" alignment="CENTER" layoutX="24.0" layoutY="104.0" prefHeight="59.0" prefWidth="259.0" style="-fx-background-color: white;" text="Amount" />
+      <TextField fx:id="text6" layoutX="24.0" layoutY="188.0" prefHeight="50.0" prefWidth="319.0" promptText="Enter your amount" />
+      <Button fx:id="btn5" layoutX="24.0" layoutY="252.0" mnemonicParsing="false" onAction="#withdraw" text="Withdraw" />
+      <Button fx:id="btn6" layoutX="125.0" layoutY="253.0" mnemonicParsing="false" onAction="#deposit" text="Deposit" />
+      <Label fx:id="label1" alignment="CENTER" layoutX="24.0" layoutY="104.0" prefHeight="71.0" prefWidth="249.0" style="-fx-background-color: white;" text="Amount" />
       <Label alignment="CENTER" layoutX="376.0" layoutY="100.0" prefHeight="26.0" prefWidth="181.0" text="Transaction History">
          <font>
             <Font name="System Bold" size="17.0" />
